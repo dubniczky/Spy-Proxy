@@ -1,7 +1,7 @@
 import http from 'http'
 import config from 'config'
 
-interface Headers
+type Headers =
 {
     [index: string]: string
 }
