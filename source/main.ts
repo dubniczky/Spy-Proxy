@@ -1,12 +1,12 @@
 'use strict'
 
 //Import modules
-import Express from 'express'
-import Yaml from 'js-yaml'
-import Fs from 'fs'
-import HttpProxy from 'http-proxy'
-import Crypto from 'crypto'
-import Http from 'http'
+import express from 'express'
+import yaml from 'js-yaml'
+import fs from 'fs'
+import httpProxy from 'http-proxy'
+import crypto from 'crypto'
+import http from 'http'
 
 
 
@@ -14,8 +14,8 @@ import Http from 'http'
 let config:any = null
 try
 {
-    let file = Fs.readFileSync('config.yml', 'utf-8')
-    config = Yaml.load(file)
+    let file = fs.readFileSync('config.yml', 'utf-8')
+    config = yaml.load(file)
 }
 catch (error)
 {
@@ -37,11 +37,11 @@ function logHeaders(raw : Array<string>) : void
 //Hash
 function md5(data : Buffer) : string
 {
-    return Crypto.createHash('md5').update(data).digest('hex')
+    return crypto.createHash('md5').update(data).digest('hex')
 }
 
 //Tampering
-function tamperHeader(out : boolean, req : Http.ClientRequest | Http.ServerResponse)
+function tamperHeader(out : boolean, req : http.ClientRequest | http.ServerResponse)
 {
     const conf = (out) ? config.tampering.req.header :
                          config.tampering.res.header
@@ -56,14 +56,14 @@ function tamperHeader(out : boolean, req : Http.ClientRequest | Http.ServerRespo
 
 
 // Create proxy
-const proxy = HttpProxy.createProxyServer(
+const proxy = httpProxy.createProxyServer(
 {
     ws: true,
     changeOrigin: false,
     selfHandleResponse: true
 })
 
-proxy.on('proxyReq', (preq : Http.ClientRequest, req : Http.IncomingMessage, res : Http.OutgoingMessage) =>
+proxy.on('proxyReq', (preq : http.ClientRequest, req : http.IncomingMessage, res : http.OutgoingMessage) =>
 {
     //@ts-ignore
     req['id'] = nextRequestID++
@@ -95,7 +95,7 @@ proxy.on('proxyReq', (preq : Http.ClientRequest, req : Http.IncomingMessage, res
     })
 })
 //@ts-ignore
-proxy.on('proxyRes', (pres : Http.ServerResponse, req : Http.IncomingMessage, res : Http.OutgoingMessage) =>
+proxy.on('proxyRes', (pres : http.ServerResponse, req : http.IncomingMessage, res : http.OutgoingMessage) =>
 {
     //Log header body
     //@ts-ignore
@@ -139,7 +139,7 @@ proxy.on('proxyRes', (pres : Http.ServerResponse, req : Http.IncomingMessage, re
 console.log('Proxy loaded.')
 
 //Create express app
-const app = Express();
+const app = express();
 
 app.get('*', function(req, res)
 {
