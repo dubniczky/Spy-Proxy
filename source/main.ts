@@ -1,15 +1,14 @@
 'use strict'
 
-
-//Load modules
+//Import modules
 import Express from 'express'
-import * as Yaml from 'js-yaml'
-import * as Fs from 'fs'
+import Yaml from 'js-yaml'
+import Fs from 'fs'
 import HttpProxy from 'http-proxy'
-import * as Crypto from 'crypto'
-import * as Http from 'http'
+import Crypto from 'crypto'
+import Http from 'http'
 
-let nextRequestID = 1
+
 
 //Load config
 let config:any = null
@@ -146,6 +145,9 @@ app.get('*', function(req, res)
 {
     proxy.web(req, res, { target: `${req.protocol}://${req.hostname}` })
 })
+
+//Globals
+let nextRequestID = 1
 
 console.log('Server loaded.')
 
