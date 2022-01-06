@@ -1,0 +1,6 @@
+# Proxy server ports
+ports:
+  http: 11990
+  https: 11991
+  ws: 11992
+  wss: 11993
