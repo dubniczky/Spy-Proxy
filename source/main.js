@@ -25,32 +25,73 @@ catch (error)
 console.log('Config loaded.')
 
 
+// Log headers
+function logHeaders(raw)
+{
+    for (let i = 0; i < raw.length; i += 2)
+    {
+        console.log(`${raw[i]}: ${raw[i+1]}`)
+    }
+}
+
 
 // Create proxy
 const proxy = HttpProxy.createProxyServer(
 {
     ws: true,
-    changeOrigin: false
+    changeOrigin: false,
+    selfHandleResponse: true
 })
 
 proxy.on('proxyReq', (preq, req, res) =>
 {
-    console.log('--- Request Headers')
-    console.log(req.rawHeaders)
+    //Log request
+    console.log('--- Request:', req.method, req.url)
 
+    //Log header
+    logHeaders(req.rawHeaders)
 
-    console.log('--- Request Body')
-    console.log(req.body)})
+    //Await body
+    console.log('\n')    
+    let body = []
 
+    preq.on('data', (chunk) =>
+    {
+        body.push(chunk)
+    })
+
+    preq.on('end', () =>
+    {
+        body = Buffer.concat(body).toString();
+        console.log(body)
+        console.log('---')
+        res.end(body)
+    })
+})
 proxy.on('proxyRes', (pres, req, res) =>
 {
-    console.log('--- Response Headers')
-    console.log(pres.headers)
+    //Log header body
+    console.log('--- Response')
 
-    console.log('--- Response Body')
-    console.log(req.body)
-    console.log(res.body)
-    console.log(pres.body)
+    //Log header
+    logHeaders(pres.rawHeaders)
+
+    //Await body
+    console.log('\n')
+    var body = []
+
+    pres.on('data', (chunk) =>
+    {
+        body.push(chunk)
+    })
+
+    pres.on('end', () =>
+    {
+        body = Buffer.concat(body).toString();
+        console.log(body)
+        console.log('---')
+        res.end(body)
+    })
 })
 console.log('Proxy loaded.')
 
@@ -59,15 +100,10 @@ const app = Express();
 
 app.get('*', function(req, res)
 {
-    console.log('Request:', req.method, req.url)
-    console.log(req.headers)
-
     proxy.web(req, res, { target: `${req.protocol}://${req.hostname}` })
 })
 
 console.log('Server loaded.')
-
-
 
 
 const server = app.listen(config.ports.http)
