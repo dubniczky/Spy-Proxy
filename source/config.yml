@@ -15,3 +15,14 @@ intercept:
     - text/richtext
     - text/sgml
     - application/json
+
+# Rules for modifying all intercepted packets
+tampering:
+  req: 
+    header:
+      - Connection: keep-alive
+    body:
+  res:
+    header:
+    body:
+      - { rule: /DOCTYPE/, replace: asdf }
