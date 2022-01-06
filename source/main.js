@@ -7,8 +7,9 @@ const Express = require('express')
 const Yaml = require('js-yaml')
 const Fs = require('fs')
 const HttpProxy = require('http-proxy')
+const Crypto = require('crypto')
 
-
+let nextRequestID = 1
 
 //Load config
 let config = null
@@ -34,6 +35,13 @@ function logHeaders(raw)
     }
 }
 
+//Hash
+function md5(data)
+{
+    return Crypto.createHash('md5').update(data).digest('hex')
+}
+
+
 
 // Create proxy
 const proxy = HttpProxy.createProxyServer(
@@ -45,8 +53,10 @@ const proxy = HttpProxy.createProxyServer(
 
 proxy.on('proxyReq', (preq, req, res) =>
 {
+    req.id = nextRequestID++
+
     //Log request
-    console.log('--- Request:', req.method, req.url)
+    console.log(`--- (${req.id}) Request:`, req.method, req.url)
 
     //Log header
     logHeaders(req.rawHeaders)
@@ -71,7 +81,7 @@ proxy.on('proxyReq', (preq, req, res) =>
 proxy.on('proxyRes', (pres, req, res) =>
 {
     //Log header body
-    console.log('--- Response')
+    console.log(`--- (${req.id}) Response:`)
 
     //Log header
     logHeaders(pres.rawHeaders)
@@ -87,10 +97,21 @@ proxy.on('proxyRes', (pres, req, res) =>
 
     pres.on('end', () =>
     {
-        body = Buffer.concat(body).toString();
-        console.log(body)
-        console.log('---')
-        res.end(body)
+        body = Buffer.concat(body)
+        //Intercept
+        if ( config.intercept.contentType.includes( pres.headers['content-type'] ) )
+        {
+            body = body.toString();
+            console.log(body)
+            console.log('---')
+            res.end(body)
+        }
+        else //Do not intercept
+        {
+            console.log(`md5hex:<${md5(body)}>`)
+            console.log('---')
+            res.end(body)
+        }
     })
 })
 console.log('Proxy loaded.')

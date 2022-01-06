@@ -4,3 +4,14 @@ ports:
   https: 11991
   ws: 11992
   wss: 11993
+
+# Rules for which packages to intercept
+# Packages not matching the filters will only output an md5 hash of the body
+intercept:
+  contentType:
+    - text/plain
+    - text/html
+    - text/enriched
+    - text/richtext
+    - text/sgml
+    - application/json
