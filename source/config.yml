@@ -20,7 +20,7 @@ intercept:
 tampering:
   req: 
     header:
-      - Connection: keep-alive
+      Connection: keep-alive
     body:
   res:
     header:

@@ -41,6 +41,19 @@ function md5(data)
     return Crypto.createHash('md5').update(data).digest('hex')
 }
 
+//Tampering
+function tamperHeader(out, req)
+{
+    const conf = (out) ? config.tampering.req.header :
+                         config.tampering.res.header
+
+    for (const h in conf)
+    {
+        req.setHeader(h, conf[h])
+        console.log(h, conf[h])
+    }
+}
+
 
 
 // Create proxy
@@ -54,6 +67,8 @@ const proxy = HttpProxy.createProxyServer(
 proxy.on('proxyReq', (preq, req, res) =>
 {
     req.id = nextRequestID++
+
+    tamperHeader(true, preq)
 
     //Log request
     console.log(`--- (${req.id}) Request:`, req.method, req.url)
@@ -82,6 +97,8 @@ proxy.on('proxyRes', (pres, req, res) =>
 {
     //Log header body
     console.log(`--- (${req.id}) Response:`)
+
+    tamperHeader(false, pres)
 
     //Log header
     logHeaders(pres.rawHeaders)
@@ -125,7 +142,6 @@ app.get('*', function(req, res)
 })
 
 console.log('Server loaded.')
-
 
 const server = app.listen(config.ports.http)
 console.log('Server running.')
