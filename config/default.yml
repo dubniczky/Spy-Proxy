@@ -17,7 +17,7 @@ intercept:
     - application/json
 
 # Rules for modifying all intercepted packets
-tampering:
+tamper:
   req: 
     header:
       Connection: keep-alive

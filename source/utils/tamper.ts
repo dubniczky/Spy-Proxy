@@ -8,7 +8,7 @@ type Headers =
 
 export function header(out : boolean, req : http.ClientRequest | http.OutgoingMessage)
 {
-    const conf:Headers = (out) ? config.get('tampering.req.header') : config.get('tampering.res.header')
+    const conf:Headers = (out) ? config.get('tamper.req.header') : config.get('tamper.res.header')
 
     for (const h in conf)
     {
