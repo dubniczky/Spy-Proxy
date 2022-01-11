@@ -12,6 +12,10 @@ intercept:
     - .png
     - .svg
     - .gif
+    - .ttf
+    - .otf
+    - .js
+    - .css
   contentType: # Show the received value from content (otherwise md5 hash)
     - text/plain
     - text/html
