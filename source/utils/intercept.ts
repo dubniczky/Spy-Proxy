@@ -27,5 +27,6 @@ export function check(url : string) : boolean
 // Verify if item is to be displayed
 export function display(im : http.IncomingMessage) : boolean
 {
-    return !!(im.headers['content-type'] as string).match(interceptContentTypes)
+    if (im.headers['content-type'] == null) return true //Display if content type is unknown
+    return !!(im.headers['content-type'] + '').match(interceptContentTypes)
 }
