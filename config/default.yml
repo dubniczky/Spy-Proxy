@@ -2,11 +2,8 @@
 ports:
   http: 11990
   https: 11991
-  ws: 11992
-  wss: 11993
 
 # Rules for which packages to intercept
-# Packages not matching the filters will only output an md5 hash of the body
 intercept:
   urlx: # Exclude url-s containing the following
     - .ico

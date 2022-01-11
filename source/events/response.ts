@@ -7,9 +7,6 @@ import * as tampering from '../utils/tamper'
 import { md5 } from '../utils/crypto'
 
 
-const interceptContentType:string[] = config.get('intercept.contentType')
-
-
 export default function(pres : IncomingMessage, req : IncomingMessage, res : OutgoingMessage) : void
 {
     //@ts-ignore
@@ -37,10 +34,10 @@ export default function(pres : IncomingMessage, req : IncomingMessage, res : Out
         let bodyOut:string = ''
 
         //Intercept
-        if ( interceptContentType.includes( pres.headers['content-type'] as string ) )
+        if ( intercept.display(pres) )
         {
             const bodyStr = body.toString()
-            bodyOut = bodyStr             
+            bodyOut = bodyStr
             res.end(bodyStr)
         }
         else //Do not intercept
