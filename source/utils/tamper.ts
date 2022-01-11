@@ -1,20 +1,60 @@
 import http from 'http'
 import config from 'config'
 
-
-type Headers =
+// Types
+type RegexRewrite = 
 {
-    [index: string]: string
+    rule : string,
+    replace : string
 }
 
 
-export function requestHeader(req : http.ClientRequest | http.OutgoingMessage)
-{
-    const conf:Headers = config.get<Headers>('tamper.req.header')
+// Config
+const requestHeaderRewrite:string[] = config.get<string[]>('tamper.req.header')
+const responseHeaderRewrite:string[] = config.get<string[]>('tamper.res.header')
+const responseBodyRewrite:RegexRewrite[] = config.get<RegexRewrite[]>('tamper.res.body')
 
-    for (const h in conf)
+
+// Rewrite request header from config
+export function requestHeader(req : http.ClientRequest) : void
+{
+    for (const h in requestHeaderRewrite)
     {
-        req.setHeader(h, conf[h])
-        console.log(">>>>>>>>", h, conf[h])
+        if (requestHeaderRewrite[h] == null)
+        {
+            req.removeHeader(h)
+        }
+        else
+        {
+            req.setHeader(h, requestHeaderRewrite[h])
+        }
     }
+}
+
+
+// Rewrite request header from config
+export function responseHeader(req : http.OutgoingMessage) : void
+{
+    for (const h in responseHeaderRewrite)
+    {
+        if (responseHeaderRewrite[h] == null)
+        {
+            req.removeHeader(h)
+        }
+        else
+        {
+            req.setHeader(h, responseHeaderRewrite[h])
+        }
+    }
+}
+
+
+// Rewrite request header from config
+export function responseBody(body : string) : string
+{
+    for (let rw of responseBodyRewrite)
+    {
+        body = body.replace(rw.rule, rw.replace)
+    }
+    return body
 }

@@ -38,7 +38,7 @@ export default function(pres : IncomingMessage, req : IncomingMessage, res : Out
         {
             const bodyStr = body.toString()
             bodyOut = bodyStr
-            res.end(bodyStr)
+            res.end( tampering.responseBody(bodyStr) )
         }
         else //Do not intercept
         {

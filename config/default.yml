@@ -34,4 +34,4 @@ tamper:
   res:
     header:
     body:
-      - { rule: /DOCTYPE/, replace: asdf }
+      - { rule: '{', replace: ??? }
