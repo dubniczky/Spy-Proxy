@@ -12,18 +12,18 @@ const interceptContentType:string[] = config.get('intercept.contentType')
 
 export default function(pres : IncomingMessage, req : IncomingMessage, res : OutgoingMessage) : void
 {
-    //Log header body
     //@ts-ignore
-    console.log(`--- (${req.id}) Response:`)
+    if (req.intercept)
+    {
+        //@ts-ignore
+        console.log(`--- (${req.id}) Response:`)
+        tampering.header(false, res)
+        //@ts-ignore
+        intercept.logHeaders(pres.rawHeaders)
+        console.log('\n')
+    }
 
-    tampering.header(false, res)
-
-    //Log header
-    //@ts-ignore
-    intercept.logHeaders(pres.rawHeaders)
-
-    //Await body
-    console.log('\n')
+    //Await body    
     let body:Uint8Array[] = []
 
     pres.on('data', (chunk) =>
@@ -34,19 +34,26 @@ export default function(pres : IncomingMessage, req : IncomingMessage, res : Out
     pres.on('end', () =>
     {
         const bodyb:Buffer = Buffer.concat(body)
+        let bodyOut:string = ''
+
         //Intercept
         if ( interceptContentType.includes( pres.headers['content-type'] as string ) )
         {
-            const bodyStr = body.toString();
-            console.log(bodyStr)
-            console.log('---')
+            const bodyStr = body.toString()
+            bodyOut = bodyStr             
             res.end(bodyStr)
         }
         else //Do not intercept
         {
-            console.log(`md5hex:<${md5(bodyb)}>`)
-            console.log('---')
+            bodyOut = `md5hex:<${md5(bodyb)}>`
             res.end(bodyb)
+        }
+
+        //@ts-ignore
+        if (req.intercept)
+        {
+            console.log(bodyOut)
+            console.log('---')
         }
     })
 }

@@ -5,19 +5,27 @@ import * as intercept from '../utils/intercept'
 import * as tampering from '../utils/tamper'
 
 
+
+
+
 export default function(preq : ClientRequest, req : IncomingMessage, res : OutgoingMessage)
 {
-    tampering.header(true, preq)
-
-    //Log request
+    //Check intercept
+    let doIntercept:boolean = intercept.check(req.url + '')
     //@ts-ignore
-    console.log(`--- (${req.id}) Request:`, req.method, req.url)
+    req.intercept = doIntercept
 
-    //Log header
-    intercept.logHeaders(req.rawHeaders)
+    if (doIntercept)
+    {
+        tampering.header(true, preq)
+        //@ts-ignore
+        console.log(`--- (${req.id}) Request:`, req.method, req.url)
+        intercept.logHeaders(req.rawHeaders)
+        console.log('\n')
+    }
 
+  
     //Await body
-    console.log('\n')    
     let body:Uint8Array[] = []
 
     preq.on('data', (chunk) =>
@@ -28,8 +36,13 @@ export default function(preq : ClientRequest, req : IncomingMessage, res : Outgo
     preq.on('end', () =>
     {
         const bodyStr = Buffer.concat(body).toString();
-        console.log(bodyStr)
-        console.log('---')
+        
+        if (doIntercept)
+        {
+            console.log(bodyStr)
+            console.log('---')
+        }
+
         res.end(bodyStr)
     })
 }

@@ -1,3 +1,10 @@
+import config from 'config'
+
+
+// Load config
+const urlxr = RegExp( config.get<string[]>('intercept.urlx').join('|') )
+
+
 // Log headers
 export function logHeaders(raw : string[]) : void
 {
@@ -5,4 +12,11 @@ export function logHeaders(raw : string[]) : void
     {
         console.log(`${raw[i]}: ${raw[i+1]}`)
     }
+}
+
+
+// Verify intercept
+export function check(url : string) : boolean
+{
+    return !url.match(urlxr)
 }
