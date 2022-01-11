@@ -11,7 +11,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./dist/main.js",
-    "dev": "npx ts-node-dev --respawn ./source/main.ts"
+    "dev": "npx ts-node-dev --respawn ./source/main.ts",
+    "server": "node ./test/server.js"
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
