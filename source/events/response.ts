@@ -14,7 +14,7 @@ export default function(pres : IncomingMessage, req : IncomingMessage, res : Out
     {
         //@ts-ignore
         console.log(`--- (${req.id}) Response:`)
-        tampering.header(false, res)
+        //tampering.header(false, res)
         //@ts-ignore
         intercept.logHeaders(pres.rawHeaders)
         console.log('\n')

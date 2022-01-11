@@ -27,8 +27,9 @@ intercept:
 # Rules for modifying all intercepted packets
 tamper:
   req: 
-    header:
-      Connection: keep-alive
+    header: # Modifying headers to a specific value, null means remove
+      Connection: stay-alive
+      Proxy-Connection: null
     body:
   res:
     header:

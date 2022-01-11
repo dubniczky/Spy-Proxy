@@ -5,9 +5,6 @@ import * as intercept from '../utils/intercept'
 import * as tampering from '../utils/tamper'
 
 
-
-
-
 export default function(preq : ClientRequest, req : IncomingMessage, res : OutgoingMessage)
 {
     //Check intercept
@@ -17,7 +14,7 @@ export default function(preq : ClientRequest, req : IncomingMessage, res : Outgo
 
     if (doIntercept)
     {
-        tampering.header(true, preq)
+        tampering.requestHeader(preq)
         //@ts-ignore
         console.log(`--- (${req.id}) Request:`, req.method, req.url)
         intercept.logHeaders(req.rawHeaders)
