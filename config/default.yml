@@ -8,7 +8,12 @@ ports:
 # Rules for which packages to intercept
 # Packages not matching the filters will only output an md5 hash of the body
 intercept:
-  contentType:
+  urlx: # Exclude url-s containing the following
+    - .ico
+    - .jpg
+    - .jpeg
+    - .png
+  contentType: # Show the received value from content (otherwise md5 hash)
     - text/plain
     - text/html
     - text/enriched
