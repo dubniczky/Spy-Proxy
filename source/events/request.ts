@@ -1,7 +1,9 @@
 import { ClientRequest, IncomingMessage, OutgoingMessage } from 'http'
 
+
 import * as intercept from '../utils/intercept'
 import * as tampering from '../utils/tamper'
+
 
 export default function(preq : ClientRequest, req : IncomingMessage, res : OutgoingMessage)
 {

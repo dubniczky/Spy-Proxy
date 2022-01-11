@@ -1,13 +1,16 @@
 import { IncomingMessage, OutgoingMessage } from 'http'
 import config from 'config'
 
+
 import * as intercept from '../utils/intercept'
 import * as tampering from '../utils/tamper'
 import { md5 } from '../utils/crypto'
 
+
 const interceptContentType:string[] = config.get('intercept.contentType')
 
-export default function(pres : IncomingMessage, req : IncomingMessage, res : OutgoingMessage)
+
+export default function(pres : IncomingMessage, req : IncomingMessage, res : OutgoingMessage) : void
 {
     //Log header body
     //@ts-ignore

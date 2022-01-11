@@ -1,10 +1,12 @@
 import http from 'http'
 import config from 'config'
 
+
 type Headers =
 {
     [index: string]: string
 }
+
 
 export function header(out : boolean, req : http.ClientRequest | http.OutgoingMessage)
 {
