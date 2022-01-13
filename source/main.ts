@@ -32,8 +32,6 @@ const app = express();
 
 app.get('*', (req, res) =>
 {
-    console.log('connected')
-    
     //@ts-ignore
     req.id = nextRequestID++
     proxy.web(req, res, { target: `${req.protocol}://${req.hostname}` })
