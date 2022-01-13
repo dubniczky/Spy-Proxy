@@ -1,7 +1,7 @@
 # Proxy server ports
 ports:
-  http: 11990
-  https: 11991
+  http: 80
+  https: 443
 
 # Rules for which packages to intercept
 intercept:
