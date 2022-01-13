@@ -2,6 +2,9 @@
 
 
 //Import external modules
+import fs from 'fs'
+import http from 'http'
+import https from 'https'
 import express from 'express'
 import httpProxy from 'http-proxy'
 import config from 'config'
@@ -29,18 +32,28 @@ const app = express();
 
 app.get('*', (req, res) =>
 {
+    console.log('connected')
+    
     //@ts-ignore
     req.id = nextRequestID++
     proxy.web(req, res, { target: `${req.protocol}://${req.hostname}` })
 })
 
+const httpsOptions:https.ServerOptions =
+{
+    key: fs.readFileSync('proxy.key', 'utf-8'),
+    cert: fs.readFileSync('proxy.crt', 'utf-8')
+}
+
 
 //Globals
 let nextRequestID:number = 1
-let port:number = config.get<number>('ports.http')
+let httpPort:number = config.get<number>('ports.http')
+let httpsPort:number = config.get<number>('ports.https')
 
 
-//Start
-const server = app.listen( port )
-console.log('Proxy listening on port ' + port)
+//Start servers
+const httpServer = http.createServer(app).listen(httpPort)
+const httpsServer = https.createServer(httpsOptions, app).listen(httpsPort)
+console.log(`Proxy listening on ports: (http: ${httpPort}) (https: ${httpsPort})`)
 console.log('---------------')
