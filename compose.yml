@@ -1,0 +1,15 @@
+# This is a docker compose file for NodeJS server deployments
+# Project: https://gitlab.com/richardnagy/container-environments/server-deployments
+
+version: '3'
+services:
+  spy-proxy:
+    container_name: spy-proxy
+    hostname: spy-proxy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped

@@ -36,3 +36,9 @@ Container
 docker build -t spy-proxy .
 docker run -d -p80:80 -p433:433 spy-proxy
 ```
+
+Docker-compose
+
+```bash
+docker-compose up
+```
