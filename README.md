@@ -1,7 +1,31 @@
 # Spy Proxy
 
-A NodeJS proxy service for logging outgoing and incoming packets realtime.
+An HTTP proxy service in TypeScript for logging and altering packets in real-time
 
-## Resources
+## Usage
 
-https://www.npmjs.com/package/http-proxy
+### 1. Configure Settings
+
+There are two main types of rules for the proxy:
+
+- **Intercept** - Show the URLs and the content of files matching intercept rules
+- **Tamper** - Modify headers and body based on rewrite rules
+
+> It's recommended to test your settings using the test server `make test-server`
+
+### 2. Start Server
+
+Automatic
+
+```bash
+make
+```
+
+Manual
+
+```bash
+make install
+make certiciate
+make build
+make run
+```
