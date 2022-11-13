@@ -1,18 +1,12 @@
 {
   "name": "spy-proxy",
   "version": "1.0.0",
-  "main": "./source/main.js",
+  "main": "source/main.js",
   "dependencies": {
     "config": "^3.3.6",
     "express": "^4.17.1",
     "http-proxy": "^1.18.1",
     "js-yaml": "^4.1.0"
-  },
-  "scripts": {
-    "build": "npx tsc",
-    "start": "node ./dist/main.js",
-    "dev": "npx ts-node-dev --respawn ./source/main.ts",
-    "server": "node ./test/server.js"
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
