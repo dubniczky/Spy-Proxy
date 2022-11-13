@@ -31,3 +31,7 @@ test-server::
 # Generate a self-signed certificate
 certificate::
 	./scripts/cert-gen.sh
+
+# Remove generated files
+clean::
+	rm -rf $(dist) node_modules *.crt *.key
