@@ -1,0 +1,11 @@
+.vscode/
+node_modules/
+dist/
+
+*.crt
+*.key
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
